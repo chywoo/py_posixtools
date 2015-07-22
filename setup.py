@@ -1,14 +1,14 @@
 from distutils.core import setup
-import posixtools
+import pxt
 
 setup(
-    name=posixtools.__title__,
-    version=posixtools.__version__,
-    author=posixtools.__author__,
+    name=pxt.__title__,
+    version=pxt.__version__,
+    author=pxt.__author__,
     author_email='chywoo@gmail.com',
     url='http://',
-    packages=[posixtools.__title__],
-    package_dir={posixtools.__title__:posixtools.__title__},
+    packages=[pxt.__title__],
+    package_dir={pxt.__title__:pxt.__title__},
     license='BSD New',
     zip_safe=True,
     classifiers=(
