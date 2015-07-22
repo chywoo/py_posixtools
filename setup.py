@@ -20,5 +20,5 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4'
     ),
-    description = 'Posix tools for Python'
+    description = 'Posix tools for Python', requires=['psutil']
     )

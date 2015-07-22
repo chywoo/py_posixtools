@@ -1,7 +1,23 @@
 import psutil
 import platform
 
-__author__ = 'chywoo.park'
+__author__ = 'Sungho Park'
+
+
+def ps():
+    """
+    Display process list. Processes which you do not have permission are not displayed.
+    """
+    for p in psutil.process_iter():
+        try:
+            pid = p.pid
+            name = p.name()
+            cmdline = p.cmdline()
+        except psutil.AccessDenied:
+            continue
+
+        print("%5d %10s %s" % (pid, name, cmdline))
+
 
 def kill(pid):
     """
@@ -16,8 +32,9 @@ def kill(pid):
     except Exception:
         pass
 
+
 def killall(name, params=None):
-        """
+    """
         Kill process specified by parameters.
         If you input name only, the same name processes are killed.
         If you input params too, this function checks the string is in the process command line and kills it.
@@ -30,45 +47,45 @@ def killall(name, params=None):
         :type params: Filter string for Process command line. ex)params="main.jar,string.jar,/lib/usr.so"
         """
 
-        if platform.system() == "Windows":
-            name += ".exe"
+    if platform.system() == "Windows":
+        name += ".exe"
 
-        for ps in psutil.process_iter():
-            cmdline = ""
-            try:
-                if ps.name() != name:
-                    continue
-
-                if params:
-                    cmdline = ps.cmdline()
-            except psutil.AccessDenied:
+    for ps in psutil.process_iter():
+        cmdline = ""
+        try:
+            if ps.name() != name:
                 continue
 
-            ps_found = True
+            if params:
+                cmdline = ps.cmdline()
+        except psutil.AccessDenied:
+            continue
 
-            if params:  # If you want to compare command line
-                check_list = []
-                if params is list:
-                    check_list = params
-                elif params is str:
-                    check_list = str.split(",")
-                else:
-                    check_list.append(str(params))
+        ps_found = True
 
-                # Compare command line's parameters
-                for item in check_list:
-                    ps_found = False
+        if params:  # If you want to compare command line
+            check_list = []
+            if params is list:
+                check_list = params
+            elif params is str:
+                check_list = str.split(",")
+            else:
+                check_list.append(str(params))
 
-                    for param in cmdline:
-                        if param.find(item):
-                            ps_found = True
-                            break
+            # Compare command line's parameters
+            for item in check_list:
+                ps_found = False
 
-                    if ps_found is False:   # Process is not found.
+                for param in cmdline:
+                    if param.find(item):
+                        ps_found = True
                         break
 
-            if ps_found:
-                try:
-                    ps.kill()
-                except Exception:
-                    pass
+                if ps_found is False:  # Process is not found.
+                    break
+
+        if ps_found:
+            try:
+                ps.kill()
+            except Exception:
+                pass
