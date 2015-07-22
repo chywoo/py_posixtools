@@ -65,6 +65,8 @@ def killall(name, params=None):
 
         if params:  # If you want to compare command line
             check_list = []
+
+            # Data converting
             if params is list:
                 check_list = params
             elif params is str:
@@ -77,7 +79,7 @@ def killall(name, params=None):
                 ps_found = False
 
                 for param in cmdline:
-                    if param.find(item):
+                    if param.find(item) != -1:
                         ps_found = True
                         break
 
